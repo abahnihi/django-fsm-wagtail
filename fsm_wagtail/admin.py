@@ -116,9 +116,18 @@ class FsmButtonHelper(ButtonHelper):
             classnames_add = []
         if classnames_exclude is None:
             classnames_exclude = []
-        cn = "button fsm_transition button-small button-secondary "
 
-        obj = self.view.queryset.get(pk=pk)
+        if "/inspect/" in self.request.path:  # in Inspect View, buttons are not small
+            cn = "button fsm_transition"
+        else:
+            cn = "button fsm_transition button-small button-secondary "
+
+        if (
+            hasattr(self.view, "instance") and self.view.instance
+        ):  # We are in InspectView, EditView
+            obj = self.view.instance
+        else:
+            obj = self.view.queryset.get(pk=pk)
         transitions = self.fsm_get_transitions(obj=obj, request=self.view.request)
         buttons = []
         for field_name, actions in transitions.items():
@@ -133,7 +142,7 @@ class FsmButtonHelper(ButtonHelper):
                         + "?transition=%s" % action.name,
                         "state": self.display_fsm_field(obj, fsm_field_name=field_name),
                         "label": label,
-                        "classname": cn + classname,
+                        "classname": "%s %s" % (cn, classname),
                         "title": _("%s this %s") % (label, self.verbose_name),
                     }
                 )
@@ -178,6 +187,9 @@ class FsmWagtailAdminMixin(ModelAdmin):
     fsm_confirm_template_name = "fsm_wagtail/modeladmin_confirm_action.html"
     index_view_extra_css = ("fsm_wagtail/css/fsm_wagtail_admin.css",)
     index_view_extra_js = ("fsm_wagtail/js/fsm_wagtail_admin.js",)
+
+    inspect_view_extra_css = ("fsm_wagtail/css/fsm_wagtail_admin.css",)
+    inspect_view_extra_js = ("fsm_wagtail/js/fsm_wagtail_admin.js",)
 
     def get_admin_urls_for_registration(self):
         urls = super().get_admin_urls_for_registration()

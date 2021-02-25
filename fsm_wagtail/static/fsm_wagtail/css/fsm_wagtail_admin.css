@@ -3,3 +3,9 @@
     color: #b4191f;
     background-color: transparent;
 }
+
+footer .fsm_transition.red {
+    border: 1px solid #b4191f;
+    background-color: #b4191f;
+    color: #fff;
+}

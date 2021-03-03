@@ -185,11 +185,22 @@ class FsmWagtailAdminMixin(ModelAdmin):
     fsm_transition_view_class = FsmConfirmationView
 
     fsm_confirm_template_name = "fsm_wagtail/modeladmin_confirm_action.html"
-    index_view_extra_css = ("fsm_wagtail/css/fsm_wagtail_admin.css",)
-    index_view_extra_js = ("fsm_wagtail/js/fsm_wagtail_admin.js",)
 
-    inspect_view_extra_css = ("fsm_wagtail/css/fsm_wagtail_admin.css",)
-    inspect_view_extra_js = ("fsm_wagtail/js/fsm_wagtail_admin.js",)
+    def get_index_view_extra_css(self):
+        css = super().get_index_view_extra_css()
+        return css + ["fsm_wagtail/css/fsm_wagtail_admin.css"]
+
+    def get_index_view_extra_js(self):
+        js = super().get_index_view_extra_js()
+        return js + ["fsm_wagtail/js/fsm_wagtail_admin.js"]
+
+    def get_inspect_view_extra_css(self):
+        css = super().get_index_view_extra_css()
+        return css + ["fsm_wagtail/css/fsm_wagtail_admin.css"]
+
+    def get_inspect_view_extra_js(self):
+        js = super().get_index_view_extra_js()
+        return js + ["fsm_wagtail/js/fsm_wagtail_admin.js"]
 
     def get_admin_urls_for_registration(self):
         urls = super().get_admin_urls_for_registration()

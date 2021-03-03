@@ -10,6 +10,7 @@ docs/_gh-pages
 build/
 build.py
 build
+dist/
 .DS_Store
 .noseids
 tmp/*
